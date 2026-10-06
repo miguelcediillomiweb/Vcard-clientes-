@@ -4,46 +4,50 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0072ce">
-<title>Peñafiel · Enfriador 3D</title>
+<meta name="description" content="Experiencia VCard Clientes con enfriador en realidad aumentada.">
+<title>VCard Clientes · Realidad aumentada</title>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#fff;background:#07111f}
-*{box-sizing:border-box}body{margin:0;min-height:100svh;background:linear-gradient(180deg,#0072ce 0%,#0057a8 42%,#07111f 100%);display:flex;justify-content:center}
-main{width:min(100%,520px);min-height:100svh;padding:20px 16px 28px;text-align:center;display:flex;flex-direction:column}
-h1{font-size:25px;margin:8px 0 4px}p{margin:0 0 14px;opacity:.92}
-.viewer{min-height:48svh;border-radius:24px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;overflow:hidden;margin:8px 0 18px}
-.viewer .pending{padding:28px;font-size:16px;line-height:1.45}
-.actions{display:grid;gap:12px}
-button,a{width:100%;border:0;border-radius:16px;padding:16px 14px;font-size:17px;font-weight:700;text-decoration:none;cursor:pointer}
-.whatsapp{background:#25d366;color:#fff}.catalog{background:#fff;color:#075ca8}.contact{background:#f3c316;color:#111}
-#fallback{display:none;margin-top:10px;font-size:13px;opacity:.8}
-small{display:block;margin-top:auto;padding-top:18px;opacity:.65}
+:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#fff;background:#06111f}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:linear-gradient(180deg,#0072ce 0%,#0057a8 48%,#06111f 100%);display:flex;justify-content:center}
+main{width:min(100%,540px);min-height:100svh;padding:18px 16px 26px;text-align:center;display:flex;flex-direction:column}
+.badge{display:inline-flex;align-self:center;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.14);font-size:13px;font-weight:700}
+h1{font-size:26px;margin:12px 0 5px}p{margin:0 0 14px;opacity:.94}
+.viewer{position:relative;min-height:54svh;border-radius:24px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.22);overflow:hidden;margin:8px 0 16px;display:flex;align-items:center;justify-content:center}
+#viewer-placeholder{padding:28px;font-size:16px;line-height:1.45}model-viewer{width:100%;height:54svh;background:transparent;--poster-color:transparent}
+.actions{display:grid;gap:10px}a{width:100%;border:0;border-radius:16px;padding:15px 14px;font-size:17px;font-weight:750;text-decoration:none;cursor:pointer}
+.primary{background:#fff;color:#075ca8}.whatsapp{background:#25d366;color:#fff}.phone{background:#f3c316;color:#111}.catalog{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.notice{margin:12px 0 0;padding:12px;border-radius:14px;background:rgba(0,0,0,.2);font-size:13px;line-height:1.4}
+small{display:block;margin-top:auto;padding-top:18px;opacity:.62}.hidden{display:none!important}
 </style>
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
 <main>
-<h1>Peñafiel</h1>
-<p>Conoce nuestro enfriador en 3D y realidad aumentada</p>
-
-<section class="viewer" aria-label="Visor del enfriador">
-  <div class="pending">
-    📦 <strong>Modelo 3D del enfriador</strong><br>
-    <span id="status">Estamos preparando el modelo.</span>
-  </div>
+<div class="badge">📱 VCard Clientes</div>
+<h1>Conoce el enfriador</h1>
+<p>Activa la realidad aumentada y míralo en tu espacio.</p>
+<section class="viewer" aria-label="Experiencia del enfriador">
+<div id="viewer-placeholder">🧊<br><strong>Preparando la experiencia 3D</strong><br><span id="status">Cargando…</span></div>
 </section>
-
 <section class="actions">
-  <a class="whatsapp" href="https://wa.me/" aria-label="Enviar mensaje por WhatsApp">💬 Enviar mensaje por WhatsApp</a>
-  <a class="catalog" href="#" aria-label="Ver catálogo de precios">💰 Ver catálogo de precios</a>
-  <a class="contact" href="#" id="contacto" aria-label="Guardar mi contacto">📇 Guardar mi contacto</a>
+<a id="arButton" class="primary hidden" href="#modelo">🧊 Ver enfriador en realidad aumentada</a>
+<a id="phoneButton" class="phone" href="tel:+52XXXXXXXXXX">📞 Guardar / llamar a mi número</a>
+<a class="whatsapp" href="https://wa.me/">💬 Enviar mensaje por WhatsApp</a>
+<a class="catalog" href="#catalogo">💰 Ver catálogo</a>
 </section>
-
-<div id="fallback">Si tu teléfono no es compatible con realidad aumentada, podrás ver el enfriador directamente en 3D.</div>
-<small>Experiencia móvil de Peñafiel</small>
+<div id="offlineNotice" class="notice hidden">📵 No hay conexión a Internet.<br>Puedes <strong>guardar o llamar al contacto</strong> usando la red celular.</div>
+<small>Experiencia móvil · Realidad aumentada</small>
 </main>
-<script>
-const supportsAR = 'xr' in navigator || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-document.getElementById('fallback').style.display = supportsAR ? 'block' : 'block';
+<script type="module">
+const MODEL_URL='./assets/enfriador.glb';
+const status=document.getElementById('status'),arButton=document.getElementById('arButton'),offlineNotice=document.getElementById('offlineNotice');
+function showOffline(){status.textContent='Sin conexión. El contacto sigue disponible.';offlineNotice.classList.remove('hidden');arButton.classList.add('hidden')}
+function loadViewer(){
+ const script=document.createElement('script');script.type='module';script.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+ script.onload=()=>{const viewer=document.createElement('model-viewer');viewer.id='modelo';viewer.setAttribute('src',MODEL_URL);viewer.setAttribute('camera-controls','');viewer.setAttribute('ar','');viewer.setAttribute('ar-modes','webxr scene-viewer quick-look');viewer.setAttribute('shadow-intensity','1');viewer.setAttribute('alt','Enfriador en 3D y realidad aumentada');document.querySelector('.viewer').replaceChildren(viewer);arButton.classList.remove('hidden');status.textContent='Modelo listo.'};
+ script.onerror=()=>status.textContent='El visor 3D no pudo cargarse.';document.head.appendChild(script)
+}
+if(!navigator.onLine)showOffline();else loadViewer();
+window.addEventListener('offline',showOffline);window.addEventListener('online',()=>location.reload());
 </script>
 </body>
 </html>
